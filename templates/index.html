@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Property Price Prediction</title>
+  <!-- <link rel="stylesheet" type="text/css" href="css/styles.css"> -->
+  <style>
+    /* CSS for the Property Price Prediction form */
+
+    body {
+      background-repeat: no-repeat;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      padding-top: 30px;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    select {
+      display: block;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #predicted-price {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#prediction-form').submit(function (e) {
+        e.preventDefault(); // Prevent form submission
+        var formData = $(this).serialize(); // Serialize form data
+
+        // Make AJAX POST request to the prediction route
+        $.ajax({
+          type: 'POST',
+          url: '/predict',
+          data: formData,
+          success: function (response) {
+            $('#predicted-price').text('Predicted Price: ' + response);
+          },
+          error: function (error) {
+            console.log(error);
+          }
+        });
+      });
+    });
+  </script>
+</head>
+
+<body style="background-image:url(static/images/zk.jpg);">
+  <h1>Property Price Prediction</h1>
+
+  <form id="prediction-form">
+    <label for="location">Location:</label>
+    <select name="location" id="location" class="selectpicker form-control" required=1>
+      {% for location in locations %}
+      <option value="{{location}}">{{location}}</option>
+      {% endfor %}
+    </select>
+    <label for="bhk">BHK:</label>
+    <input type="number" id="bhk" name="bhk" required><br>
+
+    <label for="bath">Bath:</label>
+    <input type="number" id="bath" name="bath" required><br>
+
+    <label for="total_sqft">Total Sqft:</label>
+    <input type="number" id="total_sqft" name="total_sqft" required><br>
+
+    <button type="submit">Predict</button>
+  </form>
+
+  <p id="predicted-price"></p>
+</body>
+
+</html>
